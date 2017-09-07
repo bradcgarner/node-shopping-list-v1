@@ -14,6 +14,7 @@ const app = express();
 // log the http layer
 app.use(morgan('common'));
 
+
 // we're going to add some items to ShoppingList
 // so there's some data to look at
 ShoppingList.create('beans', 2);
@@ -29,6 +30,16 @@ app.get('/shopping-list', (req, res) => {
   res.json(ShoppingList.get());
 });
 
+app.post('/shopping-list', jsonParser, (req, res) => {
+  if(req.body.name && req.body.budget) {
+    let item = ShoppingList.create(req.body.name, req.body.budget);
+    res.json(item);
+  } else {
+    let message = 'there was an issue with your submision';
+    console.log(message); 
+    res.status(400).send(message);
+  }
+});
 app.get('/recipes', (req, res) => {
   res.json(Recipes.get());
 });
