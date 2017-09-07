@@ -35,13 +35,37 @@ app.post('/shopping-list', jsonParser, (req, res) => {
     let item = ShoppingList.create(req.body.name, req.body.budget);
     res.json(item);
   } else {
-    let message = 'there was an issue with your submision';
+    let message = 'there was an issue with your submission';
     console.log(message); 
     res.status(400).send(message);
   }
 });
+
+app.delete('/shopping-list/:id', (req, res) => {
+  ShoppingList.delete(req.params.id);
+  console.log(`Deleted shopping list item ${req.params.id}`);
+  res.status(204).end();
+});
+
+app.delete('/recipes/:id', (req, res) => {
+  Recipes.delete(req.params.id);
+  console.log(`Deleted recipe ${req.params.id}`);
+  res.status(204).end();
+});
+
 app.get('/recipes', (req, res) => {
   res.json(Recipes.get());
+});
+
+app.post('/recipes', jsonParser, (req, res) => {
+  if(req.body.name && req.body.ingredients) {
+    let item = Recipes.create(req.body.name, req.body.ingredients);
+    res.json(item);
+  } else {
+    let message = 'there was an issue with your submission';
+    console.log(message); 
+    res.status(400).send(message);
+  }
 });
 
 app.listen(process.env.PORT || 8080, () => {
